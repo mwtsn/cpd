@@ -27,8 +27,7 @@ get_header(); ?>
                             <th class="date">Date</th>
                             <th class="assessment">Assessment</th>
                             <th class="guidance">Guidance</th>
-                            <th class="response">Response</th>
-                            <th class="points">Points</th>
+                            <th class="points">Score / Maximum</th>
                             <th class="evidence">Evidence</th>
                             <th class="categories">Categories</th>
                         </tr>
@@ -38,13 +37,14 @@ get_header(); ?>
                     // Start the Loop.
                     while ( have_posts() ) : the_post();
                         $guidance          = get_post_meta( $post->ID, '_cpd_guidance', TRUE);
-                        $feedback          = get_post_meta( $post->ID, '_cpd_feedback', TRUE);    
+                        $feedback          = get_post_meta( $post->ID, '_cpd_feedback', TRUE);
                         $criteria_group    = get_post_meta( $post->ID, '_cpd_criteria_group', FALSE);
                         $submitted         = get_post_meta( $post->ID, '_cpd_submit', TRUE );
                         $complete          = get_post_meta( $post->ID, '_cpd_complete', TRUE );
                         $submitted_date    = get_post_meta( $post->ID, '_cpd_submitted_date', TRUE );
                         $completed_date    = get_post_meta( $post->ID, '_cpd_completed_date', TRUE );
                         $total_score       = get_post_meta( $post->ID, '_cpd_score', TRUE );
+                        $max_score       = get_post_meta( $post->ID, '_cpd_score_max', TRUE );
                         $evidence_group    = get_post_meta( $post->ID, '_cpd_group', false);
                         $terms             = wp_get_post_terms( $post->ID, 'competency-category');
 
@@ -83,15 +83,9 @@ get_header(); ?>
 
                                     <a class="more" href="<?php echo get_the_permalink(); ?>">Read More <span class="screen-reader-text">about '<?php the_title();?>'</span></a>
                                 </td>
-                                <td class="response">
-                                <?php
-                                    $string  = wp_trim_words(get_the_excerpt(), 30, '');
-                                    $excerpt = trim($string, '"\':;,');
-                                    echo $excerpt; ?>&hellip;
-                                    <a class="more" href="<?php echo get_the_permalink(); ?>">Read More <span class="screen-reader-text">about '<?php the_title();?>'</span></a>
-                                </td>
+
                                 <td class="points">
-                                    <?php echo $total_score;?>
+                                    <?php echo $total_score;?> / <?php echo $max_score;?>
                                 </td>
                                 <td class="evidence">
                                     <?php

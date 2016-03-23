@@ -29,7 +29,7 @@ class CPD_Taxonomy_Development_Category {
 	 */
 	public static function get_instance() {
 		/**
-		 * If an instance hasn't been created and set to $instance create an instance 
+		 * If an instance hasn't been created and set to $instance create an instance
 		 * and set it to $instance.
 		 */
 		if ( null == self::$instance ) {
@@ -42,7 +42,7 @@ class CPD_Taxonomy_Development_Category {
 	 * Initialize the class and set its properties.
 	 */
 	public function __construct() {
-		
+
 	}
 
 	/**
@@ -50,7 +50,7 @@ class CPD_Taxonomy_Development_Category {
 	 *
 	 * @param      string    $text_domain       The text domain of the plugin.
 	 */
-	public function set_text_domain( $text_domain ) { 
+	public function set_text_domain( $text_domain ) {
 		$this->args 							= 	array(
 														'name_singular' 		=> 'Development Category',
 														'name_plural' 			=> 'Development Categories',
@@ -77,7 +77,7 @@ class CPD_Taxonomy_Development_Category {
 																					'all_items' 		=> __( 'All ' 						. $this->name_plural 				),
 																					'parent_item'		=> __( 'Parent ' 					. $this->name_plural 				),
 																					'parent_item_colon' => __( 'Parent ' 					. $this->name_plural 	. ':' 		),
-																					'edit_item' 		=> __( 'Edit ' 						. $this->name_plural 				), 
+																					'edit_item' 		=> __( 'Edit ' 						. $this->name_plural 				),
 																					'update_item' 		=> __( 'Update ' 					. $this->name_plural 				),
 																					'add_new_item' 		=> __( 'Add New ' 					. $this->name_singular 				),
 																					'new_item_name' 	=> __( 'New ' 						. $this->name_singular 	. ' Name' 	),
@@ -85,7 +85,7 @@ class CPD_Taxonomy_Development_Category {
 																				),
 														'show_in_nav_menus' => 	FALSE,
 														'show_ui' 			=> 	TRUE,
-														'hierarchical' 		=> 	FALSE,
+														'hierarchical' 		=> 	TRUE,
 														'sort' 				=> 	TRUE,
 														'args' 				=> 	array(
 																					'orderby' => 'term_order'
@@ -103,7 +103,7 @@ class CPD_Taxonomy_Development_Category {
 	 * Register the taxonomy.
 	 */
 	public function register_taxonomy() {
-		
+
 		register_taxonomy( $this->taxonomy_name, array('ppd'), $this->args['taxonomy_args'] );
 	}
 }

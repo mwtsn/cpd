@@ -32,7 +32,7 @@ class CPD_Meta_Box_Score {
 	 */
 	public static function get_instance() {
 		/**
-		 * If an instance hasn't been created and set to $instance create an instance 
+		 * If an instance hasn't been created and set to $instance create an instance
 		 * and set it to $instance.
 		 */
 		if ( null == self::$instance ) {
@@ -45,7 +45,7 @@ class CPD_Meta_Box_Score {
 	 * Initialize the class and set its properties.
 	 */
 	public function __construct() {
-		
+
 		$this->args 							= 	array(
 														'id' 					=> 'score',
 														'id_prefix' 			=> 'cpd_',
@@ -75,7 +75,7 @@ class CPD_Meta_Box_Score {
 
 		$this->metabox_id						=	$this->args['metabox_id'];
 		$this->key_prefix						=	$this->args['key_prefix'];
-		
+
 		$metabox_args							=	array(
 														'id' 				=> 	$this->metabox_id,
 														'title' 			=> 	$this->name,
@@ -92,17 +92,33 @@ class CPD_Meta_Box_Score {
 
 		$metabox_args	= 	array(
 								'fields' 	=> 	array(
-													array( 
-														'id'			=> 	$this->key_prefix . 'score', 
-														'name' 			=> 	__( 'Overall Score', $this->text_domain ),
+													array(
+														'id'			=> 	$this->key_prefix . 'score_max',
+														'name' 			=> 	__( 'Max Score', $this->text_domain ),
+														'desc'			=>	'The maxium score for this assessment',
+														'type'			=> 	'text_small',
+														'cols'			=> 	12,
+														'readonly'		=>	FALSE
+													),
+													array(
+														'id'			=> 	$this->key_prefix . 'score',
+														'name' 			=> 	__( 'Supervisor Score', $this->text_domain ),
 														'desc'			=>	'Enter overall score for this assessment',
+														'type'			=> 	'text_small',
+														'cols'			=> 	12,
+														'readonly'		=>	FALSE
+													),
+													array(
+														'id'			=> 	$this->key_prefix . 'score_self',
+														'name' 			=> 	__( 'Self Assessment Score', $this->text_domain ),
+														'desc'			=>	'Participants self assessment score for this assessment',
 														'type'			=> 	'text_small',
 														'cols'			=> 	12,
 														'readonly'		=>	FALSE
 													),
 												)
 							);
-		
+
 		$this->args['metabox_args'] 			= 	array_merge( $this->args[ 'metabox_args'], $metabox_args );
 	}
 
@@ -111,7 +127,7 @@ class CPD_Meta_Box_Score {
 	 *
 	 * @param      string    $text_domain       The text domain of the plugin.
 	 */
-	public function set_text_domain( $text_domain ) { 
+	public function set_text_domain( $text_domain ) {
 		$this->text_domain = $text_domain;
 	}
 
@@ -122,21 +138,37 @@ class CPD_Meta_Box_Score {
 	 * @return	array 	$meta_boxes 	The modified metaboxes array
 	 */
 	function register_metabox( $meta_boxes ) {
-		
+
 		$user_id 			= 	get_current_user_id();
 		$user_type 			= 	get_user_meta( $user_id, 'cpd_role', TRUE );
-		
+
 		if( $user_type == 'participant' )
 		{
 			$metabox_args	= 	array(
 									'fields' 	=> 	array(
-														array( 
-															'id'			=> 	$this->key_prefix . 'score', 
+														array(
+															'id'			=> 	$this->key_prefix . 'score_max',
+															'name' 			=> 	__( 'Max Score', $this->text_domain ),
+															'desc'			=>	'The maxium score for this assessment (set by supervisor)',
+															'type'			=> 	'text_small',
+															'cols'			=> 	12,
+															'readonly'		=>	TRUE
+														),
+														array(
+															'id'			=> 	$this->key_prefix . 'score',
 															'name' 			=> 	__( 'Overall Score', $this->text_domain ),
 															'desc'			=>	'Only a supervisor can set the score.',
 															'type'			=> 	'text_small',
 															'cols'			=> 	12,
 															'readonly'		=>	TRUE
+														),
+														array(
+															'id'			=> 	$this->key_prefix . 'score_self',
+															'name' 			=> 	__( 'Self Assessment Score', $this->text_domain ),
+															'desc'			=>	'Enter your score for this assessment',
+															'type'			=> 	'text_small',
+															'cols'			=> 	12,
+															'readonly'		=>	FALSE
 														),
 													)
 								);
@@ -145,7 +177,7 @@ class CPD_Meta_Box_Score {
 		}
 
 		$meta_boxes[] 							= 	$this->args['metabox_args'];
-		
+
 		return $meta_boxes;
 	}
 
