@@ -9,7 +9,7 @@ if( !class_exists( 'CPD_Notices' ) ) {
  * Notices
  *
  * Notice functionality
- * 
+ *
  * @package    CPD
  * @subpackage CPD/admin
  * @author     Make Do <hello@makedo.in>
@@ -24,7 +24,7 @@ class CPD_Notices {
 	 */
 	public static function get_instance() {
 		/**
-		 * If an instance hasn't been created and set to $instance create an instance 
+		 * If an instance hasn't been created and set to $instance create an instance
 		 * and set it to $instance.
 		 */
 		if ( null == self::$instance ) {
@@ -37,7 +37,7 @@ class CPD_Notices {
 	 * Initialize the class and set its properties.
 	 */
 	public function __construct() {
-		
+
 	}
 
 	/**
@@ -45,7 +45,7 @@ class CPD_Notices {
 	 *
 	 * @param      string    $text_domain       The text domain of the plugin.
 	 */
-	public function set_text_domain( $text_domain ) { 
+	public function set_text_domain( $text_domain ) {
 		$this->text_domain = $text_domain;
 	}
 
@@ -53,15 +53,15 @@ class CPD_Notices {
 	 * Add taxonomies as a notice
 	 */
 	public function add_notice_taxonomy() {
-	
+
 		global $pagenow; global $typenow;
-		
+
 		/* get the current admin page */
 		$current_admin_page = $pagenow;
-		
+
 		/* check this is the post listing page for this post type */
 		if( $current_admin_page == 'edit.php' ) {
-			
+
 			/* get all the taxonomies for this post type */
 			$taxonomies = get_object_taxonomies( $typenow, 'objects' );
 			/* remove post formats */
@@ -70,16 +70,37 @@ class CPD_Notices {
 			unset( $taxonomies[ 'ef_editorial_meta' ] );
 			unset( $taxonomies[ 'following_users' ] );
 			unset( $taxonomies[ 'ef_usergroup' ] );
-			
+
+			$user_id 			= 	get_current_user_id();
+			$user_type 			= 	get_user_meta( $user_id, 'cpd_role', TRUE );
+
+			if( $user_type == 'participant' ) {
+				$mkdo_aspire_visible_taxonomies = get_site_option( 'mkdo_aspire_visible_taxonomies', array() );
+
+				if(
+					! isset( $mkdo_aspire_visible_taxonomies['competency-category'] ) ||
+					! isset( $mkdo_aspire_visible_taxonomies['competency-category']['particpant-can-add-new'] )
+				) {
+					unset( $taxonomies[ 'competency-category' ] );
+				}
+
+				if(
+					! isset( $mkdo_aspire_visible_taxonomies['development-category'] ) ||
+					! isset( $mkdo_aspire_visible_taxonomies['development-category']['particpant-can-add-new'] )
+				) {
+					unset( $taxonomies[ 'development-category' ] );
+				}
+			}
+
 			/* check we have taxonomies to show */
 			if( ! empty( $taxonomies ) ) {
 			?>
 			<div class="updated taxonomies-notice">
 				<h3 class="tax-title">Taxonomies:</h3>
-				
+
 				<ul class="tax-list">
 				<?php
-					
+
 					/* loop through each taxonomy */
 					foreach( $taxonomies as $tax ) {
 						//echo $tax->name;//'<pre>'; var_dump( $tax ); echo '</pre>';
@@ -89,9 +110,9 @@ class CPD_Notices {
 							<a href="<?php echo admin_url( 'edit-tags.php?taxonomy=' . $tax->name ); ?>"><?php echo esc_html( $tax->labels->name ); ?></a>
 						</li>
 						<?php
-						
+
 					} // end loop through taxonomies
-					
+
 				?>
 				</ul>
 			</div>
@@ -109,7 +130,7 @@ class CPD_Notices {
 			?>
 			<div class="updated view-notice">
 				<h3 class="view-title">View:</h3>
-				
+
 				<ul class="view-list">
 				<?php
 					if( isset( $_GET['page'] ) && $_GET['page'] == 'cms-tpv-page-page' ) {
@@ -140,9 +161,9 @@ class CPD_Notices {
 	 * Add edting disabled as a notice
 	 */
 	public function add_notice_editing_disabled() {
-	
+
 		global $pagenow; global $typenow; global $post_id;
-		
+
 		/* get the current admin page */
 		$current_admin_page = $pagenow;
 
@@ -154,10 +175,10 @@ class CPD_Notices {
 		}
 		$user_id 			= 	get_current_user_id();
 		$user_type 			= 	get_user_meta( $user_id, 'cpd_role', TRUE );
-		
+
 		/* check this is the post listing page for this post type */
 		if( $current_admin_page == 'post.php' && $user_type == 'participant' && $submitted ) {
-			
+
 			?>
 			<div class="error">
 			<p>

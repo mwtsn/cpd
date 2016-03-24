@@ -51,6 +51,19 @@ class CPD_Taxonomy_Development_Category {
 	 * @param      string    $text_domain       The text domain of the plugin.
 	 */
 	public function set_text_domain( $text_domain ) {
+
+		$mkdo_aspire_visible_taxonomies = get_site_option( 'mkdo_aspire_visible_taxonomies', array() );
+
+		$hirachical = true;
+
+		if(
+			isset( $mkdo_aspire_visible_taxonomies['development-category'] ) &&
+			isset( $mkdo_aspire_visible_taxonomies['development-category']['use-tags'] ) &&
+			$mkdo_aspire_visible_taxonomies['development-category']['use-tags'] == 'true'
+		) {
+			$hirachical = false;
+		}
+
 		$this->args 							= 	array(
 														'name_singular' 		=> 'Development Category',
 														'name_plural' 			=> 'Development Categories',
@@ -85,7 +98,7 @@ class CPD_Taxonomy_Development_Category {
 																				),
 														'show_in_nav_menus' => 	FALSE,
 														'show_ui' 			=> 	TRUE,
-														'hierarchical' 		=> 	TRUE,
+														'hierarchical' 		=> 	$hirachical,
 														'sort' 				=> 	TRUE,
 														'args' 				=> 	array(
 																					'orderby' => 'term_order'
@@ -104,7 +117,36 @@ class CPD_Taxonomy_Development_Category {
 	 */
 	public function register_taxonomy() {
 
-		register_taxonomy( $this->taxonomy_name, array('ppd'), $this->args['taxonomy_args'] );
+		$user_id 			= 	get_current_user_id();
+		$user_type 			= 	get_user_meta( $user_id, 'cpd_role', TRUE );
+
+		$mkdo_aspire_visible_taxonomies = get_site_option( 'mkdo_aspire_visible_taxonomies', array() );
+
+		$render = true;
+
+		if(
+			(
+				! isset( $mkdo_aspire_visible_taxonomies['development-category'] ) ||
+				! isset( $mkdo_aspire_visible_taxonomies['development-category']['show-to-supervisors'] )
+			) &&
+			$user_type == 'supervisor'
+		) {
+			$render = false;
+		}
+
+		if(
+			(
+				! isset( $mkdo_aspire_visible_taxonomies['development-category'] ) ||
+				! isset( $mkdo_aspire_visible_taxonomies['development-category']['show-to-particpants'] )
+			) &&
+			$user_type == 'participant'
+		) {
+			$render = false;
+		}
+
+		if( $render ) {
+			register_taxonomy( $this->taxonomy_name, array('ppd'), $this->args['taxonomy_args'] );
+		}
 	}
 }
 }

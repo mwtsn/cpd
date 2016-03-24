@@ -21,6 +21,16 @@
  * Domain Path:       /languages
  */
 
+// Constants
+define( 'MKDO_ASPIRE_ROOT', __FILE__ );
+define( 'MKDO_ASPIRE_TEXT_DOMAIN', 'cpd' );
+
+// Load Classes
+require_once "php/class.Options.php";
+
+// Use Namespaces
+use mkdo\aspire\Options;
+
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
@@ -37,38 +47,23 @@ if ( !class_exists( 'CPD' ) ) {
 		private $plugin_path;
 		private $plugin_url;
 		private $text_domain;
-
-		/**
-		 * Creates or returns an instance of this class.
-		 */
-		public static function get_instance() {
-			/**
-			 * If an instance hasn't been created and set to $instance create an instance
-			 * and set it to $instance.
-			 */
-			if ( null == self::$instance ) {
-				self::$instance = new self;
-			}
-			return self::$instance;
-		}
+		private $options;
 
 		/**
 		 * Define the core functionality of the plugin.
 		 *
 		 * Load the dependencies, define the locale, and set the hooks
 		 */
-		private function __construct() {
-
-			$this->plugin_path  = plugin_dir_path( __FILE__ );
-			$this->plugin_url   = plugin_dir_url( __FILE__ );
-			$this->text_domain = 'cpd';
+		public function __construct( Options $options ) {
+            $this->options     = $options;
+            $this->plugin_path = plugin_dir_path( __FILE__ );
+            $this->plugin_url  = plugin_dir_url( __FILE__ );
+            $this->text_domain = MKDO_ASPIRE_TEXT_DOMAIN;
 
 			$this->load_dependencies();
 			load_plugin_textdomain( $this->text_domain, false, $this->plugin_path . '\languages' );
 			register_activation_hook( __FILE__, array( $this, 'activation' ) );
 			register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
-
-			$this->run();
 		}
 
 		/**
@@ -261,6 +256,7 @@ if ( !class_exists( 'CPD' ) ) {
 		public function run() {
 			$this->admin_hooks();
 			$this->public_hooks();
+			$this->options->run();
 		}
 
 		/**
@@ -950,7 +946,37 @@ if ( !class_exists( 'CPD' ) ) {
 	}
 }
 
-CPD::get_instance();
+// Initialize Classes
+$options    = new Options();
+$controller = new CPD( $options );
+
+// Run the Plugin
+$controller->run();
+
+
+function aspire_hide_add_button() {
+	$user_id 			= 	get_current_user_id();
+	$user_type 			= 	get_user_meta( $user_id, 'cpd_role', TRUE );
+
+	if( $user_type == 'participant' ) {
+		$mkdo_aspire_visible_taxonomies = get_site_option( 'mkdo_aspire_visible_taxonomies', array() );
+
+		if(
+			! isset( $mkdo_aspire_visible_taxonomies['competency-category'] ) ||
+			! isset( $mkdo_aspire_visible_taxonomies['competency-category']['particpant-can-add-new'] )
+		) {
+			echo '<style>#competency-category-adder { display:none; visibility: hidden; }</style>';
+		}
+
+		if(
+			! isset( $mkdo_aspire_visible_taxonomies['development-category'] ) ||
+			! isset( $mkdo_aspire_visible_taxonomies['development-category']['particpant-can-add-new'] )
+		) {
+			echo '<style>#development-category-adder { display:none; visibility: hidden; }</style>';
+		}
+	}
+}
+add_action( 'admin_head', 'aspire_hide_add_button' );
 
 /**
  * GitHub Updater
