@@ -34,7 +34,7 @@ class CPD_CPT_PPD {
 	 */
 	public static function get_instance() {
 		/**
-		 * If an instance hasn't been created and set to $instance create an instance 
+		 * If an instance hasn't been created and set to $instance create an instance
 		 * and set it to $instance.
 		 */
 		if ( null == self::$instance ) {
@@ -47,7 +47,7 @@ class CPD_CPT_PPD {
 	 * Initialize the class and set its properties.
 	 */
 	public function __construct() {
-		
+
 		$this->args 							= 	array(
 														'cpt_name' 				=> 'ppd',
 														'dash_icon' 			=> 'dashicons-index-card',
@@ -93,7 +93,7 @@ class CPD_CPT_PPD {
 														'menu_position'			=> 	$this->menu_postition,
 
 														'rewrite' 				=> 	array(
-																						'slug' => $this->slug 
+																						'slug' => $this->slug
 																					),
 
 														'supports' 				=> 	array(
@@ -109,7 +109,7 @@ class CPD_CPT_PPD {
 																						'page-attributes',
 																						// 'post-formats'
 																					),
-													
+
 														'label'					=> __( $this->name_plural, $this->text_domain  ),
 														'labels' 				=> array(
 																						'name'					=> __( $this->name_plural, 														$this->text_domain  ),
@@ -126,7 +126,7 @@ class CPD_CPT_PPD {
 																						'not_found_in_trash'	=> __( 'No ' 					. $this->name_plural 	. 	' found in trash', 	$this->text_domain  ),
 																					)
 													);
-		
+
 		$this->args['post_type_args'] 			= 	array_merge( $post_type_args, $this->args[ 'post_type_args'] );
 	}
 
@@ -135,7 +135,7 @@ class CPD_CPT_PPD {
 	 *
 	 * @param      string    $text_domain       The text domain of the plugin.
 	 */
-	public function set_text_domain( $text_domain ) { 
+	public function set_text_domain( $text_domain ) {
 		$this->text_domain = $text_domain;
 	}
 
@@ -144,22 +144,22 @@ class CPD_CPT_PPD {
 	 */
 	public function register_post_type() {
 		$blog_id = get_current_blog_id();
-			
+
 		if( SITE_ID_CURRENT_SITE != $blog_id ) {
 			register_post_type( $this->cpt_name, $this->args['post_type_args'] );
 		}
-		
+
 	}
 
 	/**
 	 * Move advanced metaboxes above the editor
 	 */
 	public function move_advanced_metaboxes_above_editor() {
-		
+
 		global $post, $wp_meta_boxes;
 
 		$screen = get_current_screen();
-		
+
 		if( $screen->id == $this->cpt_name )
 		{
 			echo '<br/>';
@@ -172,7 +172,7 @@ class CPD_CPT_PPD {
 	 * Change the name of the featured image meta box so it is more relevent to the plugin
 	 */
 	public function set_featured_image_metabox_title() {
-	
+
 		remove_meta_box( 'postimagediv', $this->cpt_name, 'side' );
 
 		if( empty( $this->image_metabox_title ) )
@@ -189,7 +189,7 @@ class CPD_CPT_PPD {
 	 * Insert text above the title
 	 */
 	public function add_title_helper_text() {
-		
+
 		global $post, $wp_meta_boxes;
 
 		$html = '<h3>Activity Name</h3>';
@@ -198,7 +198,7 @@ class CPD_CPT_PPD {
 		if( !empty( $html ) )
 		{
 			$screen = get_current_screen();
-		
+
 			if( $screen->id == $this->cpt_name ) {
 				echo $html;
 			}
@@ -209,10 +209,10 @@ class CPD_CPT_PPD {
 	 * Insert text above the editor
 	 */
 	public function add_editor_helper_text() {
-		
+
 		global $post, $wp_meta_boxes;
 
-		
+
 		$html = '<h2>Value obtained</h2>';
 		$html .= '<p class="cmb_metabox_description"><em>Eg. Value obtained, skills acquired, learning outcomes, how PPD (Personal and Professional Development) has benefited the quality of my practice and users of my work.</em></p>';
 
@@ -220,11 +220,11 @@ class CPD_CPT_PPD {
 		if( !empty( $html ) )
 		{
 			$screen = get_current_screen();
-		
+
 			if( $screen->id == $this->cpt_name ) {
 				echo $html;
 			}
-		}	
+		}
 	}
 
 	/**
@@ -240,7 +240,7 @@ class CPD_CPT_PPD {
 	 * @param 	int 	$post_id 		The post ID
 	 */
 	public function update_excerpt_on_save( $post_id ) {
-	
+
 		// If it is just a revision don't worry about it
 		if ( wp_is_post_revision( $post_id ) ) {
 			return $post_id;
