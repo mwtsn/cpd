@@ -13,17 +13,14 @@
 	$is_elevated_user 				    = get_user_meta( $current_user->ID, 'elevated_user', TRUE ) == '1';
 
 	if( is_network_admin() || $is_elevated_user ) {
-		$link                               = 'https://github.com/mkdo/cpd/wiki/User-Guide';
 		$text                               = '<p>You can view guidance on how to setup and manage this system by viewing the <a href="'. esc_url( $link ) .'" target="_blank">System Administrator User Guide</a>.</p>';
 		$button_text                        = 'View User Guide';
 	}
 	else if( in_array( 'supervisor', $roles ) ) {
-		$link                               = 'https://github.com/mkdo/cpd/wiki/User-Guide';
 		$text                               = '<p>You can view guidance on how to use this system by viewing the <a href="'. esc_url( $link ) .'" target="_blank">Supervisor User Guide</a>.</p>';
 		$button_text                        = 'View User Guide';
 	}
 	else if( in_array( 'participant', $roles ) ) {
-		$link                               = 'https://github.com/mkdo/cpd/wiki/Participant-User-Guide';
 		$text                               = '<p>You can view guidance on how to manage your Journal by viewing the <a href="'. esc_url( $link ) .'" target="_blank">Participant User Guide</a>.</p>';
 		$button_text                        = 'View User Guide';
 	}
