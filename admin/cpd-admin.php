@@ -24,7 +24,7 @@ class CPD_Admin {
 	 */
 	public static function get_instance() {
 		/**
-		 * If an instance hasn't been created and set to $instance create an instance 
+		 * If an instance hasn't been created and set to $instance create an instance
 		 * and set it to $instance.
 		 */
 		if ( null == self::$instance ) {
@@ -37,7 +37,7 @@ class CPD_Admin {
 	 * Initialize the class and set its properties.
 	 */
 	public function __construct() {
-		
+
 	}
 
 	/**
@@ -45,7 +45,7 @@ class CPD_Admin {
 	 *
 	 * @param      string    $text_domain       The text domain of the plugin.
 	 */
-	public function set_text_domain( $text_domain ) { 
+	public function set_text_domain( $text_domain ) {
 		$this->text_domain = $text_domain;
 	}
 
@@ -111,11 +111,11 @@ class CPD_Admin {
 
 		$title				= $name . ' ' . $level . ' ' . $avatar;
 
-		$wp_admin_bar->add_node( 
+		$wp_admin_bar->add_node(
 			array(
 				'id' => 'my-account',
 				'title' => $title,
-			) 
+			)
 		);
 	}
 
@@ -163,11 +163,11 @@ class CPD_Admin {
 
 	/**
 	 * Rename page titles
-	 * 
+	 *
 	 * @param  string 	$translation 	The translated text
 	 * @param  string 	$text        	The text to be translated
 	 * @param  string 	$domain      	The domain of the text we are translating
-	 * 
+	 *
 	 * @return string 	$translation 	The translated text
 	 */
 	public function rename_page_titles( $translation, $text, $domain )
@@ -204,11 +204,11 @@ class CPD_Admin {
 	 * Rename post object
 	 */
 	function rename_post_object() {
-		
-		global $wp_post_types;	
+
+		global $wp_post_types;
 
 		$blog_id = get_current_blog_id();
-		
+
 		if( SITE_ID_CURRENT_SITE != $blog_id ) {
 
 			$labels = &$wp_post_types['post']->labels;
@@ -238,7 +238,7 @@ class CPD_Admin {
 			array(
 				'id'    => 'aspire-logo',
 				'title' => '<span class="ab-icon"></span><span class="screen-reader-text">About Aspire CPD</span>',
-				'href'  => 'http://aspirecpd.org',
+				'href'  => 'http://makedo.net',
 				'meta'  => array(
 					'target' => '_blank'
 				)

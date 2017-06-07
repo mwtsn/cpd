@@ -14,6 +14,7 @@ get_header(); ?>
         while ( have_posts() ) : the_post();
             $date_completed    = get_post_meta( $post->ID, '_cpd_date_completed', true);
             $points            = get_post_meta( $post->ID, '_cpd_points', true);
+			$total_score       = get_post_meta( $post->ID, '_cpd_score', TRUE );
             $evidence_group    = get_post_meta( $post->ID, '_cpd_group', false);
             $terms             = wp_get_post_terms( $post->ID, 'development-category');
             ?>
@@ -50,8 +51,8 @@ get_header(); ?>
                                     if ( !empty( $points ) ) {
                                         ?>
                                         <section>
-                                            <h2>Points Awarded</h2>
-                                            <p><?php  echo $points;?></p>
+                                            <h2>Points Awarded / Overall Score</h2>
+                                            <p><?php  echo $points;?> / <p><?php  echo $total_score;?></p></p>
                                         </section>
                                         <?php
                                     }
