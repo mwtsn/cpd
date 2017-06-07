@@ -52,7 +52,7 @@ get_header(); ?>
                                         ?>
                                         <section>
                                             <h2>Points Awarded / Overall Score</h2>
-                                            <p><?php  echo $points;?> / <p><?php  echo $total_score;?></p></p>
+                                            <p><?php  echo $points;?> / <?php  echo $total_score;?></p>
                                         </section>
                                         <?php
                                     }
