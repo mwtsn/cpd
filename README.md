@@ -30,6 +30,9 @@ To update the plugin directly from GitHub we use the awesome [WordPress GitHub P
 
 Here are all the great features that have been implemented so far!
 
+### 3.0.1
+- Score added to output.  
+
 ### 3.0.0
 - Prevent supervisors editing participant content.
 
