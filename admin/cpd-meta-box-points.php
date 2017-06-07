@@ -32,7 +32,7 @@ class CPD_Meta_Box_Points {
 	 */
 	public static function get_instance() {
 		/**
-		 * If an instance hasn't been created and set to $instance create an instance 
+		 * If an instance hasn't been created and set to $instance create an instance
 		 * and set it to $instance.
 		 */
 		if ( null == self::$instance ) {
@@ -45,7 +45,7 @@ class CPD_Meta_Box_Points {
 	 * Initialize the class and set its properties.
 	 */
 	public function __construct() {
-		
+
 		$this->args 							= 	array(
 														'id' 					=> 'points',
 														'id_prefix' 			=> 'cpd_',
@@ -75,7 +75,7 @@ class CPD_Meta_Box_Points {
 
 		$this->metabox_id						=	$this->args['metabox_id'];
 		$this->key_prefix						=	$this->args['key_prefix'];
-		
+
 		$metabox_args							=	array(
 														'id' 				=> 	$this->metabox_id,
 														'title' 			=> 	$this->name,
@@ -92,8 +92,8 @@ class CPD_Meta_Box_Points {
 
 		$metabox_args	= 	array(
 								'fields' 	=> 	array(
-													array( 
-														'id'			=> 	$this->key_prefix . 'points', 
+													array(
+														'id'			=> 	$this->key_prefix . 'points',
 														'name' 			=> 	__( 'Points Awarded', $this->text_domain ),
 														'desc'			=>	'Enter the points that this achievement should be awarded',
 														'type'			=> 	'text_small',
@@ -102,7 +102,7 @@ class CPD_Meta_Box_Points {
 													),
 												)
 							);
-		
+
 		$this->args['metabox_args'] 			= 	array_merge( $this->args[ 'metabox_args'], $metabox_args );
 	}
 
@@ -111,7 +111,7 @@ class CPD_Meta_Box_Points {
 	 *
 	 * @param      string    $text_domain       The text domain of the plugin.
 	 */
-	public function set_text_domain( $text_domain ) { 
+	public function set_text_domain( $text_domain ) {
 		$this->text_domain = $text_domain;
 	}
 
@@ -122,16 +122,16 @@ class CPD_Meta_Box_Points {
 	 * @return	array 	$meta_boxes 	The modified metaboxes array
 	 */
 	function register_metabox( $meta_boxes ) {
-		
+
 		$user_id 			= 	get_current_user_id();
 		$user_type 			= 	get_user_meta( $user_id, 'cpd_role', TRUE );
-		
+
 		if( $user_type == 'participant' )
 		{
 			$metabox_args	= 	array(
 									'fields' 	=> 	array(
-														array( 
-															'id'			=> 	$this->key_prefix . 'points', 
+														array(
+															'id'			=> 	$this->key_prefix . 'points',
 															'name' 			=> 	__( 'Points Awarded', $this->text_domain ),
 															'desc'			=>	'Only a supervisor can award points',
 															'type'			=> 	'text_small',
@@ -145,7 +145,7 @@ class CPD_Meta_Box_Points {
 		}
 
 		$meta_boxes[] 							= 	$this->args['metabox_args'];
-		
+
 		return $meta_boxes;
 	}
 

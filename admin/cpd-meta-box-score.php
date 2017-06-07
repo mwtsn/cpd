@@ -79,7 +79,7 @@ class CPD_Meta_Box_Score {
 		$metabox_args							=	array(
 														'id' 				=> 	$this->metabox_id,
 														'title' 			=> 	$this->name,
-														'pages' 			=> 	array('assessment'),
+														'pages' 			=> 	array('ppd','assessment'),
 														'context' 			=> 	$this->context,
 														'priority' 			=> 	$this->priority,
 														'show_on'			=>	array(),
