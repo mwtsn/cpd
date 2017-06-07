@@ -546,10 +546,14 @@ if ( !class_exists( 'CPD' ) ) {
 			 *
 			 * [1] Hide metaboxes
 			 * [2] Remove metaboxes
+			 * [3] Hide the editor
+			 * [4] Disable Title
 			 */
 
 			/*1*/ add_action( 'default_hidden_meta_boxes', array( $metaboxes, 'hide_metaboxes' ), 10, 2 );
 			/*2*/ add_action( 'admin_menu', array( $metaboxes, 'remove_metaboxes' ) );
+			/*3*/ add_action( 'init', array( $metaboxes, 'remove_excpert_editor' ) );
+			/*4*/ add_action( 'admin_enqueue_scripts', array( $metaboxes, 'disable_title' ) );
 
 			/**
 			 * Columns

@@ -132,5 +132,45 @@ class CPD_Metaboxes {
 			}
 		}
 	}
+
+	/**
+	 * Remove the excerpt and the editor.
+	 */
+	public function remove_excpert_editor() {
+		$user_id 			= 	get_current_user_id();
+		$is_admin 			=	current_user_can( 'manage_options' );
+		$is_elevated_user	=	get_user_meta( $user_id, 'elevated_user', TRUE ) == '1';
+		$user_type 			= 	get_user_meta( $user_id, 'cpd_role', true );
+		$remove_metaboxes 	=	array();
+		$all_post_types 	=	get_post_types();
+
+		if( $user_type == 'supervisor' ) {
+			// remove_post_type_support( 'post', 'editor' );
+			// remove_post_type_support( 'page', 'editor' );
+			// remove_post_type_support( 'ppd', 'editor' );
+			// remove_post_type_support( 'assessment', 'editor' );
+			// remove_post_type_support( 'post', 'excerpt' );
+			// remove_post_type_support( 'page', 'excerpt' );
+			// remove_post_type_support( 'ppd', 'excerpt' );
+			// remove_post_type_support( 'assessment', 'excerpt' );
+		}
+	}
+
+	/**
+	 * Add scripts for just the supervisor.
+	 */
+	public function disable_title() {
+
+		$user_id 			= 	get_current_user_id();
+		$is_admin 			=	current_user_can( 'manage_options' );
+		$is_elevated_user	=	get_user_meta( $user_id, 'elevated_user', TRUE ) == '1';
+		$user_type 			= 	get_user_meta( $user_id, 'cpd_role', true );
+		$remove_metaboxes 	=	array();
+		$all_post_types 	=	get_post_types();
+
+		if ( $user_type == 'supervisor' ) {
+			wp_enqueue_script( 'cpd-admin-supervisor-scripts', plugin_dir_url( __FILE__ ) . 'js/cpd-supervisor.js', array( 'jquery' ), '1.1.11', TRUE );
+		}
+	}
 }
 }
