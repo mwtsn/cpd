@@ -6,18 +6,18 @@
 $post_listing 	= $widget[ 'link' ];
 $post_new 		= $widget[ 'call_to_action_link' ];
 
-if ( $widget[ 'post_type' ] == 'page' && defined('CMS_TPV_URL') ) { 
+if ( $widget[ 'post_type' ] == 'page' && defined('CMS_TPV_URL') ) {
 	if( $post_listing = 'edit.php?post_type=page' ) {
 		$post_listing = 'edit.php?post_type=page&page=cms-tpv-page-page';
 	}
 }
 
 $css_block_class = $widget[ 'css_class' ];
-											
+
 ?>
 
 <div class="<?php echo esc_attr( $css_block_class ); ?>">
-	
+
 	<?php
 	if( !empty( $widget[ 'post_type' ] ) ) {
 		?>
@@ -30,11 +30,11 @@ $css_block_class = $widget[ 'css_class' ];
 	<div class="content-description">
 
 		<?php echo $widget[ 'desc' ]; ?>
-	
+
 	</div>
-	
+
 	<?php
-		
+
 		if( $widget[ 'show_tax' ] == true ) {
 
 			$taxonomies = get_object_taxonomies( $widget[ 'post_type' ], 'objects' );
@@ -44,15 +44,36 @@ $css_block_class = $widget[ 'css_class' ];
 			unset( $taxonomies[ 'ef_editorial_meta' ] );
 			unset( $taxonomies[ 'following_users' ] );
 			unset( $taxonomies[ 'ef_usergroup' ] );
-			
+
+			$user_id 			= 	get_current_user_id();
+			$user_type 			= 	get_user_meta( $user_id, 'cpd_role', TRUE );
+
+			if( $user_type == 'participant' ) {
+				$mkdo_aspire_visible_taxonomies = get_site_option( 'mkdo_aspire_visible_taxonomies', array() );
+
+				if(
+					! isset( $mkdo_aspire_visible_taxonomies['competency-category'] ) ||
+					! isset( $mkdo_aspire_visible_taxonomies['competency-category']['particpant-can-add-new'] )
+				) {
+					unset( $taxonomies[ 'competency-category' ] );
+				}
+
+				if(
+					! isset( $mkdo_aspire_visible_taxonomies['development-category'] ) ||
+					! isset( $mkdo_aspire_visible_taxonomies['development-category']['particpant-can-add-new'] )
+				) {
+					unset( $taxonomies[ 'development-category' ] );
+				}
+			}
+
 			if( ! empty( $taxonomies ) ) {
-				
+
 				?>
 				<h4 class="tax-title">Associated Taxonomies</h4>
-				
+
 				<ul class="tax-list">
 				<?php
-					
+
 					foreach( $taxonomies as $tax ) {
 						?>
 						<li class="<?php echo esc_attr( sanitize_title( $tax->name ) ); ?>">
@@ -61,17 +82,17 @@ $css_block_class = $widget[ 'css_class' ];
 						</li>
 						<?php
 					}
-					
+
 				?>
 				</ul>
-					
+
 				<?php
 			}
-			
-		}	
-		
+
+		}
+
 	?>
-	
+
 	<p class="footer-button"><a class="button" href="<?php echo esc_url( $post_listing ); ?>"><?php echo esc_html( $widget[ 'button_label' ] ); ?></a></p>
-	
+
 </div>

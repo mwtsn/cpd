@@ -133,7 +133,7 @@ class CPD_Options_Users_Participants {
 											if( count( $all_cpd_journals ) ) {
 												foreach( $all_cpd_journals as $journal ) {
 
-													if( BLOG_ID_CURRENT_SITE != $journal['blog_id']  ) {
+													if( BLOG_ID_CURRENT_SITE != $journal['blog_id'] && strpos( $journal['path'], '/template-' ) === false ) {
 													?>
 														<option value="<?php echo $journal['blog_id'];?>" <?php echo $journal['blog_id'] == $cpd_journal['blog_id'] ? 'selected' : '';?>>
 															http://<?php echo $journal['domain'] . $journal['path'];?>
@@ -177,7 +177,7 @@ class CPD_Options_Users_Participants {
 									<br/>
 									<br/>
 									<p><strong>Supervisors</strong></p>
-									<p>Choose assign other supervisors of the participant:</p>
+									<p>Assign other supervisors of the participant:</p>
 									<?php
 										if( is_array( $all_supervisors  ) && count( $all_supervisors  ) > 0 ) {
 											?>

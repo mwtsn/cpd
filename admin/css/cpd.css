@@ -223,3 +223,38 @@ div.updated.view-notice .dashicons-before:before {
 .postbox .inside table {
     font-size: 13px;
 }
+
+.my-sites-php #myblogs .form-table {
+    display: none;
+    visibility: hidden;
+}
+
+.form-table table {
+	width: 100%;
+    border-collapse: collapse;
+}
+
+.form-table table th {
+    border: 1px solid black;
+    padding: 10px;
+    background-color: white;
+    text-align: center;
+}
+
+.form-table table td {
+	padding: 0px;
+	margin: 0px;
+    text-align: center;
+    border: 1px solid black;
+    padding: 10px;
+    background-color: #ddd;
+}
+
+.form-table table td.empty {
+    background-color: transparent;
+    border:none;
+}
+
+.form-table table td input {
+	width: 100%;
+}

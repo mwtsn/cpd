@@ -15,6 +15,7 @@ if ( !class_exists( 'CPD_Users' ) ) {
 	 * @author     Make Do <hello@makedo.in>
 	 */
 	class CPD_Users {
+
 		private static $instance = null;
 		private $text_domain;
 
@@ -147,6 +148,14 @@ if ( !class_exists( 'CPD_Users' ) ) {
 			$role->add_cap( 'supervise_users' );
 			$role->add_cap( 'manage_privacy' );
 
+			// Let supervisors manage users
+			$role->add_cap('edit_users');
+	        $role->add_cap('list_users');
+	        $role->add_cap('promote_users');
+	        $role->add_cap('create_users');
+	        $role->add_cap('add_users');
+	        $role->add_cap('delete_users');
+
 			// Make sure admins have the supervisor privilege
 			$role = get_role( 'administrator' );
 			$role->add_cap( 'supervise_users' );
@@ -268,9 +277,9 @@ if ( !class_exists( 'CPD_Users' ) ) {
 		 * Get all multisite users
 		 */
 		public static function get_multisite_users() {
-			$users                =    array();
-			$user_ids            =    array();
-			$blogs                =    wp_get_sites();
+            $users    = array();
+            $user_ids = array();
+            $blogs    = wp_get_sites();
 
 			foreach ( $blogs as $blog ) {
 
@@ -293,9 +302,9 @@ if ( !class_exists( 'CPD_Users' ) ) {
 		 * Get all participants
 		 */
 		public static function get_participants() {
-			$users                =    array();
-			$user_ids            =    array();
-			$blogs                =    wp_get_sites();
+            $users    = array();
+            $user_ids = array();
+            $blogs    = wp_get_sites();
 
 			foreach ( $blogs as $blog ) {
 
@@ -510,7 +519,7 @@ if ( !class_exists( 'CPD_Users' ) ) {
 			$user_data       =    $user->data;
 			$current_site    =    network_site_url();
 			$domain        	 =    parse_url( network_site_url(), PHP_URL_HOST );
-			$path            =    $user_data->user_login . '/';
+			$path            =    sanitize_title( $user_data->user_login ) . '/';
 			$title 			 =	  'CPD Journal for ' . $user_data->user_nicename;
 
 			// $cpd_settings    =    get_option( 'cpd_new_blog_options' );
@@ -523,10 +532,10 @@ if ( !class_exists( 'CPD_Users' ) ) {
 			$blog = get_blog_details( $path );
 
 			if( empty($blog) ) {
-				$blogs->copy_blog( $path, $title, $base_id, TRUE );
+				$blogs->copy_blog( $path, $title, $base_id, false );
 			} else {
 				$path = uniqid() . '/';
-				$blogs->copy_blog( $path, $title, $base_id, TRUE );
+				$blogs->copy_blog( $path, $title, $base_id, false );
 			}
 		}
 
@@ -544,8 +553,20 @@ if ( !class_exists( 'CPD_Users' ) ) {
 				$user_type                =    get_user_meta( $user->ID, 'cpd_role', true );
 
 				if ( $user_type == 'participant' ) {
-					$primary_blog    =    get_active_blog_for_user( $user->ID );
-					$redirect_to    =    get_admin_url( $primary_blog->blog_id );
+                    $primary_blog = get_active_blog_for_user( $user->ID );
+                    $redirect_to  = get_admin_url( $primary_blog->blog_id );
+				} else if( $user_type == 'supervisor' ) {
+
+                    $user_blogs = get_blogs_of_user( $user->ID );
+
+					if( is_array( $user_blogs ) ) {
+						if( count( $user_blogs ) == 2 ) {
+							$last       = end( $user_blogs );
+							$redirect_to  = get_admin_url( $last->userblog_id );
+						} else if( count( $user_blogs ) > 2 ) {
+							$redirect_to  = admin_url( 'index.php' );
+						}
+					}
 				}
 			}
 

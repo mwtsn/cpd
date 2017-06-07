@@ -30,8 +30,22 @@ To update the plugin directly from GitHub we use the awesome [WordPress GitHub P
 
 Here are all the great features that have been implemented so far!
 
-### 2.5.0
+### 2.6.0
 - User guide link now editable.  
+
+### 2.5.3
+- Amended Assessments overview page
+- Swapped tag based taxonomies to be category based
+- Added options page to allow certain taxonomies to be shown or hidden from participants
+
+### 2.5.2
+- Fixed issue where author not changing on template copy
+
+### 2.5.1
+- Restored supervisors ability to manage participants
+
+### 2.5.0
+- Various amendments to help provide a clearer UI
 
 ### 2.4.7
 - Issues fixed where an elevated admin can not manage other elevated admins

@@ -29,7 +29,7 @@ class CPD_Taxonomy_Competency_Category {
 	 */
 	public static function get_instance() {
 		/**
-		 * If an instance hasn't been created and set to $instance create an instance 
+		 * If an instance hasn't been created and set to $instance create an instance
 		 * and set it to $instance.
 		 */
 		if ( null == self::$instance ) {
@@ -42,7 +42,7 @@ class CPD_Taxonomy_Competency_Category {
 	 * Initialize the class and set its properties.
 	 */
 	public function __construct() {
-		
+
 	}
 
 	/**
@@ -50,7 +50,20 @@ class CPD_Taxonomy_Competency_Category {
 	 *
 	 * @param      string    $text_domain       The text domain of the plugin.
 	 */
-	public function set_text_domain( $text_domain ) { 
+	public function set_text_domain( $text_domain ) {
+
+		$mkdo_aspire_visible_taxonomies = get_site_option( 'mkdo_aspire_visible_taxonomies', array() );
+
+		$hirachical = true;
+
+		if(
+			isset( $mkdo_aspire_visible_taxonomies['competency-category'] ) &&
+			isset( $mkdo_aspire_visible_taxonomies['competency-category']['use-tags'] ) &&
+			$mkdo_aspire_visible_taxonomies['competency-category']['use-tags'] == 'true'
+		) {
+			$hirachical = false;
+		}
+
 		$this->args 							= 	array(
 														'name_singular' 		=> 'Competency Category',
 														'name_plural' 			=> 'Competency Categories',
@@ -77,7 +90,7 @@ class CPD_Taxonomy_Competency_Category {
 																					'all_items' 		=> __( 'All ' 						. $this->name_plural 				),
 																					'parent_item'		=> __( 'Parent ' 					. $this->name_plural 				),
 																					'parent_item_colon' => __( 'Parent ' 					. $this->name_plural 	. ':' 		),
-																					'edit_item' 		=> __( 'Edit ' 						. $this->name_plural 				), 
+																					'edit_item' 		=> __( 'Edit ' 						. $this->name_plural 				),
 																					'update_item' 		=> __( 'Update ' 					. $this->name_plural 				),
 																					'add_new_item' 		=> __( 'Add New ' 					. $this->name_singular 				),
 																					'new_item_name' 	=> __( 'New ' 						. $this->name_singular 	. ' Name' 	),
@@ -85,7 +98,7 @@ class CPD_Taxonomy_Competency_Category {
 																				),
 														'show_in_nav_menus' => 	FALSE,
 														'show_ui' 			=> 	TRUE,
-														'hierarchical' 		=> 	FALSE,
+														'hierarchical' 		=> 	$hirachical,
 														'sort' 				=> 	TRUE,
 														'args' 				=> 	array(
 																					'orderby' => 'term_order'
@@ -103,8 +116,37 @@ class CPD_Taxonomy_Competency_Category {
 	 * Register the taxonomy.
 	 */
 	public function register_taxonomy() {
-		
-		register_taxonomy( $this->taxonomy_name, array('assessment'), $this->args['taxonomy_args'] );
+
+		$user_id 			= 	get_current_user_id();
+		$user_type 			= 	get_user_meta( $user_id, 'cpd_role', TRUE );
+
+		$mkdo_aspire_visible_taxonomies = get_site_option( 'mkdo_aspire_visible_taxonomies', array() );
+
+		$render = true;
+
+		if(
+			(
+				! isset( $mkdo_aspire_visible_taxonomies['competency-category'] ) ||
+				! isset( $mkdo_aspire_visible_taxonomies['competency-category']['show-to-supervisors'] )
+			) &&
+			$user_type == 'supervisor'
+		) {
+			$render = false;
+		}
+
+		if(
+			(
+				! isset( $mkdo_aspire_visible_taxonomies['competency-category'] ) ||
+				! isset( $mkdo_aspire_visible_taxonomies['competency-category']['show-to-particpants'] )
+			) &&
+			$user_type == 'participant'
+		) {
+			$render = false;
+		}
+
+		if( $render ) {
+			register_taxonomy( $this->taxonomy_name, array('assessment'), $this->args['taxonomy_args'] );
+		}
 	}
 }
 }

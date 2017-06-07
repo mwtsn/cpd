@@ -84,10 +84,10 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 		 */
 		public function add_content_menu_items() {
 
-			$posts_name = 'Journal Entries';		
+			$posts_name = 'Journal Entries';
 
 			$blog_id = get_current_blog_id();
-			
+
 			if( SITE_ID_CURRENT_SITE == $blog_id ) {
 				$posts_name = 'Posts';
 			}
@@ -137,10 +137,10 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 			$template_name                     =    'cpd-content-menu-dashboard-widget';
 			$template_path                     =    CPD_Templates::get_template_path( $template_name );
 
-			$posts_name = 'Journal Entries';		
+			$posts_name = 'Journal Entries';
 
 			$blog_id = get_current_blog_id();
-			
+
 			if( SITE_ID_CURRENT_SITE == $blog_id ) {
 				$posts_name = 'Posts';
 			}
@@ -175,7 +175,7 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 
 			// If this is not the root site
 			if( SITE_ID_CURRENT_SITE != $blog_id ) {
-				
+
 				// PPD
 				$content_menu_dashboard_widgets[]    =    array(
 					'title'                   => __( 'Activity Logs', $this->text_domain ),
@@ -249,7 +249,7 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 			// Remove for everyone
 			$admin_menus[]      =    'edit.php';                                        // Posts
 			$admin_menus[]      =    'edit.php?post_type=page';                         // Pages
-			
+
 			// Remove if is template
 			if( CPD_Blogs::blog_is_template() ) {
 				$admin_menus[]   =  'edit-comments.php';                                // Comments
@@ -282,12 +282,12 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 			}
 
 			// Remove for everyone but admins
-			if ( !$is_admin || $is_elevated_user ) {
+			if ( ! $is_admin || $is_elevated_user ) {
 
 			}
 
 			// Remove for everyone but elevated users and admins
-			if ( !$is_elevated_user && !$is_admin ) {
+			if ( ! $is_elevated_user && ! $is_admin ) {
 
 			}
 
@@ -316,6 +316,34 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 
 			// Remove for everyone
 
+			$blog_id = get_current_blog_id();
+
+			if( SITE_ID_CURRENT_SITE != $blog_id ) {
+				// Users
+				$sub_menus[]    =    array(
+					'parent'    =>    'users.php',
+					'menu'      =>    'users.php',
+				);
+
+				$sub_menus[]    =    array(
+					'parent'    =>    'users.php',
+					'menu'      =>    'user-new.php',
+				);
+
+				if( $user_type != 'supervisor' ) {
+
+					$sub_menus[]    =    array(
+						'parent'    =>    'users.php',
+						'menu'      =>    'cpd_settings_users_participants',
+					);
+					
+				}
+
+				$sub_menus[]    =    array(
+					'parent'    =>    'users.php',
+					'menu'      =>    'cpd_settings_users_supervisors',
+				);
+			}
 
 			// Remove for participants
 			if ( $user_type == 'participant' ) {
@@ -355,6 +383,12 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 					'menu'      =>    'widgets.php',
 				);
 
+				// My Sites
+				$sub_menus[]    =    array(
+					'parent'    =>    'index.php',
+					'menu'      =>    'my-sites.php',
+				);
+
 				// Customize
 				// $sub_menus[] =    array(
 				// 	'parent'    =>    'themes.php',
@@ -381,12 +415,6 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 					'menu'      =>    'user-new.php',
 				);
 
-				// My Sites
-				$sub_menus[]    =    array(
-					'parent'    =>    'index.php',
-					'menu'      =>    'my-sites.php',
-				);
-
 				// Themes
 				$sub_menus[]    =    array(
 					'parent'    =>    'themes.php',
@@ -395,7 +423,7 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 			}
 
 			// Remove for everyone but elevated users
-			if ( !$is_elevated_user ) {
+			if ( ! $is_elevated_user ) {
 
 				// Themes
 				$sub_menus[]    =    array(
@@ -422,7 +450,7 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 			}
 
 			// Remove for everyone but elevated users and admins
-			if ( !$is_elevated_user && !$is_admin ) {
+			if ( ! $is_elevated_user && !$is_admin ) {
 
 			}
 
@@ -585,7 +613,7 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 		 * @hook  filter_cpd_add_network_admin_menus  Filter to add menus to network admin menus
 		 */
 		public function add_network_admin_menus() {
-			
+
 			$network_menus = array();
 
 			// Add for all users
@@ -639,6 +667,27 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 						$network         = $menu[$key];
 						unset( $menu[$key] );
 						$menu[2]         = $network;
+					}
+				}
+			}
+		}
+
+		/**
+		 * Rename admin menus
+		 */
+		public function rename_admin_menus() {
+			if ( is_super_admin() ) {
+
+				global $menu;
+
+				// Rename menu items
+				foreach ( $menu as $key=>&$menu_item ) {
+					$blog_id = get_current_blog_id();
+					if( SITE_ID_CURRENT_SITE != $blog_id ) {
+
+						if ( $menu_item[0] == 'Users' ) {
+							$menu_item[0] = 'Profile';
+						}
 					}
 				}
 			}
