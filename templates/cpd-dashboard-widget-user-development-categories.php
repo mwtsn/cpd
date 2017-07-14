@@ -21,17 +21,19 @@ foreach ( $blogs as $blog ){
 
     $blog_posts	 					= 	get_posts( $post_args );
     foreach( $blog_posts as $blog_post ) {
-    	
+
     	$blog_post->blog_id = $blog['blog_id'];
     	$blog_post->siteurl = get_bloginfo('wpurl');
     	$blog_post->blogname = get_bloginfo( 'name' );
     	$blog_post->permalink = get_permalink( $blog_post->ID );
     	$terms             				= 	wp_get_post_terms( $blog_post->ID, 'development-category');
-    	foreach ( $terms as $term ) {
-    		$categories[ $term->name ][]  = $blog_post;
-    	}
+        if( ! is_wp_error( $terms ) ) {
+            foreach ( $terms as $term ) {
+        		$categories[ $term->name ][]  = $blog_post;
+        	}
+        }
     }
-	
+
     restore_current_blog();
 }
 

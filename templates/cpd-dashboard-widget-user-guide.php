@@ -4,7 +4,7 @@
  */
 ?>
 <?php
-	$link                               = get_option( 'cpd_user_guide', 'https://github.com/mkdo/cpd/wiki' );
+	$link                               = get_blog_option( 1, 'cpd_user_guide', 'https://github.com/mkdo/cpd/wiki' );
 	$text                               = '<p>You can view guidance on how to use this system by visiting the <a href="'. esc_url( $link ) .'" target="_blank">Wiki</a>.</p>';
 	$button_text                        = 'View Wiki';
 

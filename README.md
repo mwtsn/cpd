@@ -30,6 +30,9 @@ To update the plugin directly from GitHub we use the awesome [WordPress GitHub P
 
 Here are all the great features that have been implemented so far!
 
+### 3.0.3
+- Implemented user feedback regarding 3.0.0 changes.  
+
 ### 3.0.2
 - Score output bug fix.  
 

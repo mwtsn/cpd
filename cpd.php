@@ -12,7 +12,7 @@
  * Plugin Name:       CPD
  * Plugin URI:        https://github.com/mkdo/cpd
  * Description:       Turns WordPress into a CPD Journal management system.
- * Version:           3.0.2
+ * Version:           3.0.3
  * Author:            MKDO Ltd. (Make Do)
  * Author URI:        http://makedo.in
  * License:           GPL-2.0+
@@ -787,7 +787,7 @@ if ( !class_exists( 'CPD' ) ) {
 			/*1*/ add_filter( 'cmb_meta_boxes', array( $meta_box_date_completed, 'register_metabox' ) );
 			/*2*/ add_filter( 'cmb_meta_boxes', array( $meta_box_description, 'register_metabox' ) );
 			/*3*/ add_filter( 'cmb_meta_boxes', array( $meta_box_evidence, 'register_metabox' ), 98 );
-			/*4*/ add_filter( 'cmb_meta_boxes', array( $meta_box_points, 'register_metabox' ), 99 );
+			/*4*/ // add_filter( 'cmb_meta_boxes', array( $meta_box_points, 'register_metabox' ), 99 );
 			/*5*/ add_filter( 'cmb_meta_boxes', array( $meta_box_score, 'register_metabox' ), 99 );
 			/*6*/ add_filter( 'cmb_meta_boxes', array( $meta_box_privacy, 'register_metabox' ) );
 			/*7*/ add_action( 'save_post', array( $meta_box_privacy, 'change_post_status' ), 99, 2 );

@@ -336,7 +336,7 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 						'parent'    =>    'users.php',
 						'menu'      =>    'cpd_settings_users_participants',
 					);
-					
+
 				}
 
 				$sub_menus[]    =    array(
@@ -667,6 +667,7 @@ if ( !class_exists( 'CPD_Menus' ) ) {
 						$network         = $menu[$key];
 						unset( $menu[$key] );
 						$menu[2]         = $network;
+						break;
 					}
 				}
 			}

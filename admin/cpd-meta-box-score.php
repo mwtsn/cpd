@@ -114,7 +114,7 @@ class CPD_Meta_Box_Score {
 														'desc'			=>	'Participants self assessment score for this assessment',
 														'type'			=> 	'text_small',
 														'cols'			=> 	12,
-														'readonly'		=>	FALSE
+														'readonly'		=>	TRUE
 													),
 												)
 							);
